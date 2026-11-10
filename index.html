@@ -299,15 +299,58 @@ notasBody.innerHTML+=linhaNota;
 });
 
 function calcular(){
-
 const nomes=[
 
 document.getElementById("carro1").value || "Carro 1",
 
+document.getElementById("carro2").value || "Carro 2",
+
+document.getElementById("carro3").value || "Carro 3"
+
+];
+
+let totais=[0,0,0];
+let somaPesos=0;
+
+for(let i=0;i<criterios.length;i++){
+
+const peso=
+parseFloat(
+document.getElementById(
+"peso"+i
+).value
+);
+
+somaPesos+=peso;
+
+for(let carro=0;carro<3;carro++){
+
+const nota=
+parseFloat(
+document.getElementById(
+`n${i}_${carro}`
+).value
+);
+
+totais[carro]+=nota*peso;
+
+}
+
+}
+
+let ranking=
+nomes.map(
+(nome,index)=>({
+nome:nome,
+nota:
+totais[index]/
+somaPesos
+})
+);
+
 ranking.sort(
 (a,b)=>b.nota-a.nota
 );
-
 document
 .getElementById("resultado")
 .style.display="block";
