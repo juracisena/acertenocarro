@@ -453,17 +453,26 @@ behavior:"smooth"
 
 function novaComparacao(){
 
-if(
-confirm(
-"Deseja limpar todos os dados?"
-)
-){
+document.getElementById(
+"modalNovaComparacao"
+).style.display="flex";
+
+}
+
+function fecharModal(){
+
+document.getElementById(
+"modalNovaComparacao"
+).style.display="none";
+
+}
+
+function confirmarNovaComparacao(){
 
 location.reload();
 
 }
 
-}
 
 </script>
 <div id="modalNovaComparacao" style="
