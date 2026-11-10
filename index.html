@@ -1,2 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acerte no Carro - Painel Comparativo</title>
+
+<style>
+
+:root{
+--bg:#0d0d0d;
+--card:#1b1b1b;
+--orange:#ff7a00;
+--orange2:#ff9d2e;
+--white:#ffffff;
+--gray:#bdbdbd;
+--border:#333;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Tahoma,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--white);
+padding:30px 15px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+header{
+text-align:center;
+margin-bottom:30px;
+}
+
+.logo{
+font-size:42px;
+font-weight:900;
+color:var(--orange);
+letter-spacing:1px;
+}
+
+.subtitle{
+color:var(--gray);
+margin-top:10px;
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:16px;
+padding:20px;
+margin-bottom:20px;
+}
+
+h2{
+margin-bottom:15px;
+color:var(--orange2);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:12px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:none;
+background:#292929;
+color:white;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #444;
+padding:8px;
+text-align:center;
+}
+
+th{
+background:#222;
+}
+
+button{
+padding:12px 22px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.primary{
+background:var(--orange);
+color:black;
+}
+
+.secondary{
+background:#333;
+color:white;
+}
+
+.actions{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:20px;
+}
+
+#resultado{
+display:none;
+}
+
+.vencedor{
+background:linear-gradient(
+135deg,
+#ff7a00,
+#ffab3d
+);
+color:black;
+padding:25px;
+border-radius:12px;
+text-align:center;
+margin-bottom:20px;
+}
+
+.vencedor h3{
+font-size:36px;
+}
+
+.ranking-item{
+padding:12px;
+background:#222;
+border-radius:8px;
+margin-bottom:8px;
+}
+
+footer{
+text-align:center;
+margin-top:40px;
+color:#999;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+<div class="logo">
 ACERTE NO CARRO
-GitHub Pages funcionando.
+</div>
+
+<p class="subtitle">
+Compare até 3 veículos através da sua própria média ponderada.
+</p>
+</header>
+
+<section class="card">
+
+<h2>1. Veículos</h2>
+
+<div class="grid">
+
+<input id="carro1" placeholder="Carro 1">
+<input id="carro2" placeholder="Carro 2">
+<input id="carro3" placeholder="Carro 3">
+
+</div>
+
+</section>
+
+<section class="card">
+
+<h2>2. Importância dos critérios</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Critério</th>
+<th>Peso</th>
+</tr>
+</thead>
+
+<tbody id="pesos"></tbody>
+
+</table>
+
+</section>
+
+<section class="card">
+
+<h2>3. Notas dos veículos</h2>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Critério</th>
+<th>Carro 1</th>
+<th>
+    <footer>
+
+<p>Acerte no Carro</p>
+<p>@acertenocarro</p>
+
+</footer>
+
+</div>
+
+<script>
+
+const criterios=[
+"Preço",
+"Consumo",
+"Segurança",
+"Manutenção",
+"Confiabilidade",
+"Conforto",
+"Espaço",
+"Revenda"
+];
+
+const pesosBody=document.getElementById("pesos");
+const notasBody=document.getElementById("notas");
+
+criterios.forEach((criterio,index)=>{
+
+let linhaPeso=`
+<tr>
+<td>${criterio}</td>
+<td>
+<select id="peso${index}">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3" selected>3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+</select>
+</td>
+</tr>
+`;
+
+pesosBody.innerHTML+=linhaPeso;
+
+let linhaNota=`
+<tr>
+<td>${criterio}</td>
+
+<td>
+<input
+type="number"
+min="1"
+max="10"
+value="5"
+id="n${index}_0">
+</td>
+
+<td>
+<input
+type="number"
+min="1"
+max="10"
+value="5"
+id="n${index}_1">
+</td>
+
+<td>
+<input
+type="number"
+min="1"
+max="10"
+value="5"
+id="n${index}_2">
+</td>
+
+</tr>
+`;
+
+notasBody.innerHTML+=linhaNota;
+
+});
+
+function calcular(){
+
+const nomes=[
+
+document.getElementById("carro1").value || "Carro 1",
+
+ranking.sort(
+(a,b)=>b.nota-a.nota
+);
+
+document
+.getElementById("resultado")
+.style.display="block";
+
+document
+.getElementById("vencedor")
+.innerHTML=`
+
+<h2>🏆 Melhor Escolha</h2>
+
+<h3>${ranking[0].nome}</h3>
+
+<p style="font-size:24px;font-weight:bold">
+${ranking[0].nota.toFixed(2)}/10
+</p>
+
+`;
+
+let html="";
+
+ranking.forEach((item,index)=>{
+
+html+=`
+
+<div class="ranking-item">
+
+${index+1}º Lugar —
+<strong>${item.nome}</strong>
+
+(${item.nota.toFixed(2)}/10)
+
+</div>
+
+`;
+
+});
+
+document
+.getElementById("ranking")
+.innerHTML=html;
+
+window.scrollTo({
+top:
+document.body.scrollHeight,
+behavior:"smooth"
+});
+
+}
+
+function novaComparacao(){
+
+if(
+confirm(
+"Deseja limpar todos os dados?"
+)
+){
+
+location.reload();
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
